@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TeacherController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,16 +15,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Auth::routes();
+
 Route::get('/', function () {
     return view('home');
 });
+Route::get('/home', function () {
+    return view('home');
+});
+Route::get('/attendance', function () {
+    return view('home');
+});
+Route::get('/teachers', function () {
+    return view('home');
+});
+Route::get('/students', function () {
+    return view('home');
+});
+Route::get('/subjects', function () {
+    return view('home');
+});
 
-Auth::routes();
-
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-// Route::get('/{any}', function () {
-//     return view('home');
-// })->where('any', '.*');
 
 Route::get("getTeachers", [TeacherController::class, 'index']);
 Route::post("addTeacher", [TeacherController::class, 'store']);
+Route::put("editTeacher/{id}", [TeacherController::class, 'update']);
+Route::delete("deleteTeacher/{id}", [TeacherController::class, 'destroy']);

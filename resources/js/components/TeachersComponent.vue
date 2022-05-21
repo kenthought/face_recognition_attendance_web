@@ -1,25 +1,55 @@
 <template>
-    <div class="container">
+    <div class="pr-3">
         <h2 class="text-normal mt-3 mb-3">Teachers</h2>
         <hr />
         <b-button class="mt-3" variant="outline-primary" v-b-modal.modal_add
             ><b-icon icon="plus-circle-fill"></b-icon> Add Teacher</b-button
         >
-        <div class="row justify-content-center mt-4">
-            <b-table hover :items="items"></b-table>
+        <div class="row justify-content-center mt-4 p-3">
+            <b-table
+                show-empty
+                striped
+                hover
+                :fields="fields"
+                :items="items"
+                label-sort-asc=""
+                label-sort-desc=""
+                label-sort-clear=""
+                @row-clicked="onRowClicked"
+            ></b-table>
         </div>
 
         <!-- Add Modal -->
         <b-modal
             id="modal_add"
-            ref="modal"
-            title="Add Teacher"
+            ref="modal_add"
             size="lg"
-            @show="resetModal"
             @hidden="resetModal"
             @ok="handleOk"
         >
-            <form ref="form" method="POST" @submit.stop.prevent="handleSubmit">
+            <div slot="modal-header">
+                <div v-if="view == false">
+                    <h5 class="modal-title">Add Teacher</h5>
+                </div>
+                <div v-else>
+                    <div class="row">
+                        <div class="col-xl-10">
+                            <h5 class="modal-title">Teacher Details</h5>
+                        </div>
+                        <div class="pt-1 col-xl-2">
+                            <b-form-checkbox
+                                id="editing"
+                                v-model="editing"
+                                name="editing"
+                            >
+                                Edit
+                            </b-form-checkbox>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3"></div>
+            </div>
+            <form ref="form" @submit.stop.prevent="handleSubmit">
                 <b-form-group
                     class="mb-2"
                     label="First Name"
@@ -32,6 +62,13 @@
                         v-model="item.first_name"
                         :state="first_name_state"
                         required
+                        :disabled="
+                            editing != true
+                                ? view == true
+                                    ? true
+                                    : false
+                                : false
+                        "
                     ></b-form-input>
                 </b-form-group>
                 <b-form-group
@@ -46,6 +83,13 @@
                         v-model="item.last_name"
                         :state="last_name_state"
                         required
+                        :disabled="
+                            editing != true
+                                ? view == true
+                                    ? true
+                                    : false
+                                : false
+                        "
                     ></b-form-input>
                 </b-form-group>
                 <b-form-group
@@ -58,6 +102,13 @@
                         id="middle_name"
                         v-model="item.middle_name"
                         :state="middle_name_state"
+                        :disabled="
+                            editing != true
+                                ? view == true
+                                    ? true
+                                    : false
+                                : false
+                        "
                     ></b-form-input>
                 </b-form-group>
                 <b-form-group
@@ -73,6 +124,13 @@
                         :state="birthday_state"
                         type="date"
                         required
+                        :disabled="
+                            editing != true
+                                ? view == true
+                                    ? true
+                                    : false
+                                : false
+                        "
                     ></b-form-input>
                 </b-form-group>
                 <b-form-group
@@ -87,6 +145,13 @@
                         v-model="item.course"
                         :state="course_state"
                         required
+                        :disabled="
+                            editing != true
+                                ? view == true
+                                    ? true
+                                    : false
+                                : false
+                        "
                     ></b-form-input>
                 </b-form-group>
                 <b-form-group
@@ -101,6 +166,13 @@
                         v-model="item.contact_no"
                         :state="contact_state"
                         required
+                        :disabled="
+                            editing != true
+                                ? view == true
+                                    ? true
+                                    : false
+                                : false
+                        "
                     ></b-form-input>
                 </b-form-group>
                 <b-form-group
@@ -118,28 +190,36 @@
                         max-rows="6"
                         :state="address_state"
                         required
+                        :disabled="
+                            editing != true
+                                ? view == true
+                                    ? true
+                                    : false
+                                : false
+                        "
                     ></b-form-textarea>
                 </b-form-group>
             </form>
+            <div slot="modal-footer" v-if="view == true">
+                <b-button
+                    v-if="editing == true"
+                    size="sm"
+                    variant="success"
+                    @click="handleSubmit"
+                    >Edit</b-button
+                >
+                <b-button
+                    size="sm"
+                    variant="danger"
+                    @click="$bvModal.show('modal_confirm')"
+                    >Delete</b-button
+                >
+            </div>
         </b-modal>
 
-        <!-- Toast -->
-        <b-toast id="my-toast" variant="warning" solid>
-            <template #toast-title>
-                <div class="d-flex flex-grow-1 align-items-baseline">
-                    <b-img
-                        blank
-                        blank-color="#ff5555"
-                        class="mr-2"
-                        width="12"
-                        height="12"
-                    ></b-img>
-                    <strong class="mr-auto">Notice!</strong>
-                    <small class="text-muted mr-2">42 seconds ago</small>
-                </div>
-            </template>
-            This is the content of the toast. It is short and to the point.
-        </b-toast>
+        <b-modal id="modal_confirm" title="Delete Teacher" @ok="deleteRecord">
+            Confirm Delete?
+        </b-modal>
     </div>
 </template>
 
@@ -173,28 +253,51 @@ export default {
                     sortable: false,
                 },
                 {
-                    key: "age",
-                    label: "Person age",
-                    sortable: true,
-                    // Variant applies to the whole column, including the header and footer
-                    variant: "danger",
+                    key: "middle_name",
+                    sortable: false,
+                },
+                {
+                    key: "birthday",
+                    sortable: false,
+                },
+                {
+                    key: "course",
+                    sortable: false,
+                },
+                {
+                    key: "contact_no",
+                    sortable: false,
+                },
+                {
+                    key: "address",
+                    sortable: false,
                 },
             ],
             items: [],
+            view: false,
+            editing: false,
+            dismissSecs: 5,
+            success: 0,
+            error: "",
         };
     },
-    created() {
-    },
+    created() {},
     mounted() {
         console.log("Component mounted.");
         this.load_item();
+        console.log(this.editing);
     },
     methods: {
         load_item() {
             axios.get("getTeachers").then((response) => {
-                console.log("wew",response);
                 this.items = response.data;
             });
+        },
+        onRowClicked(items) {
+            this.view = true;
+            this.item = items;
+            console.log(this.item);
+            this.$bvModal.show("modal_add");
         },
         checkFormValidity() {
             const valid = this.$refs.form.checkValidity();
@@ -214,6 +317,103 @@ export default {
 
             return valid;
         },
+        countDownChanged(dismissCountDown) {
+            this.success = dismissCountDown;
+        },
+        handleOk(bvModalEvent) {
+            // Prevent modal from closing
+            bvModalEvent.preventDefault();
+            // Trigger submit handler
+            this.handleSubmit();
+        },
+        handleSubmit() {
+            // Exit when the form isn't valid
+            if (!this.checkFormValidity()) {
+                return;
+            }
+
+            if (this.editing != true) {
+                axios
+                    .post("addTeacher", this.item)
+                    .then((response) => {
+                        console.log(response);
+                        // Hide the modal manually
+                        this.items = response.data;
+                        this.$nextTick(() => {
+                            this.$bvModal.hide("modal_add");
+                        });
+                        this.toast(
+                            "b-toaster-top-center",
+                            "success",
+                            "Successful",
+                            "Teacher added"
+                        );
+                    })
+                    .catch((response) => {
+                        // console.log(response);
+                        this.toast(
+                            "b-toaster-top-center",
+                            "danger",
+                            "Error",
+                            "Error executing action."
+                        );
+                    });
+            } else {
+                console.log("editing");
+                axios
+                    .put("editTeacher/" + this.item.id, this.item)
+                    .then((response) => {
+                        console.log(response);
+                        // Hide the modal manually
+                        this.items = response.data;
+                        this.$nextTick(() => {
+                            this.$bvModal.hide("modal_add");
+                        });
+                        this.toast(
+                            "b-toaster-top-center",
+                            "success",
+                            "Successful",
+                            "Teacher updated"
+                        );
+                    })
+                    .catch((response) => {
+                        // console.log(response);
+                        this.toast(
+                            "b-toaster-top-center",
+                            "danger",
+                            "Error",
+                            "Error executing action."
+                        );
+                    });
+            }
+        },
+        deleteRecord() {
+            axios
+                .delete("deleteTeacher/" + this.item.id)
+                .then((response) => {
+                    this.items = response.data;
+                    console.log(response);
+                    this.$nextTick(() => {
+                        this.$bvModal.hide("modal_add");
+                    });
+                    this.toast(
+                        "b-toaster-top-center",
+                        "success",
+                        "Successful",
+                        "Teacher deleted"
+                    );
+                })
+                .catch((response) => {
+                    // console.log(response);
+                    this.toast(
+                        "b-toaster-top-center",
+                        "danger",
+                        "Error",
+                        "Error executing action."
+                    );
+                });
+            this.load_item();
+        },
         resetModal() {
             this.item = {
                 first_name: "",
@@ -231,55 +431,27 @@ export default {
             this.course_state = null;
             this.contact_state = null;
             this.address_state = null;
-        },
-        handleOk(bvModalEvent) {
-            // Prevent modal from closing
-            bvModalEvent.preventDefault();
-            // Trigger submit handler
-            this.handleSubmit();
-        },
-        handleSubmit() {
-            // Exit when the form isn't valid
-            if (!this.checkFormValidity()) {
-                return;
-            }
-
-            axios
-                .post("addTeacher", this.item)
-                .then((response) => {
-                    console.log(response);
-                    // Hide the modal manually
-                    this.items = response.data;
-                    this.$nextTick(() => {
-                        this.$bvModal.hide("modal_add");
-                    });
-                    this.toast(
-                        "b-toaster-top-center",
-                        "success",
-                        "Successful",
-                        "Teacher added"
-                    );
-                })
-                .catch((response) => {
-                    console.log(response);
-                    this.toast(
-                        "b-toaster-top-center",
-                        "danger",
-                        "Error",
-                        response.body.error
-                    );
-                });
+            this.view = false;
+            this.editing = false;
         },
         toast(toaster, variant = null, title, body) {
             this.counter++;
             this.$bvToast.toast(body, {
                 title,
+                autoHideDelay: 5000,
                 toaster: toaster,
                 solid: true,
                 variant: variant,
-                appendToast: false,
             });
         },
     },
 };
 </script>
+<style scoped>
+.toast {
+    z-index: -9999;
+}
+table tr {
+    cursor: pointer !important;
+}
+</style>

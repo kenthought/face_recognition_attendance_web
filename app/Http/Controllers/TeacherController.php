@@ -73,9 +73,14 @@ class TeacherController extends Controller
      * @param  \App\Models\Teacher  $teacher
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Teacher $teacher)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            Teacher::find($id)->fill($request->all())->save();
+            return $this->index();
+        } catch (\Exception $e) {
+            return response()->json(["error" => $e]);
+        }
     }
 
     /**
@@ -84,8 +89,13 @@ class TeacherController extends Controller
      * @param  \App\Models\Teacher  $teacher
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Teacher $teacher)
+    public function destroy($id)
     {
-        //
+        try {
+            Teacher::where("id", $id)->delete();
+            return $this->index();
+        } catch (\Exception $e) {
+            return response()->json(["error" => $e]);
+        }
     }
 }
