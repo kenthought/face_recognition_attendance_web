@@ -5,17 +5,14 @@
     >
         <router-link
             to="/"
-            class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none"
+            class="text-center text-dark pt-1 text-decoration-none"
         >
-            <svg class="bi me-2" width="40" height="32">
-                <use xlink:href="#bootstrap"></use>
-            </svg>
-            <span class="fs-4">FRA WebApp</span>
+            <h3>FRA WebApp</h3>
         </router-link>
         <hr />
         <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
-                <router-link  class="nav-link link-dark" to="/">
+                <router-link class="nav-link text-dark" to="/">
                     <svg class="bi me-2" width="16" height="16">
                         <use xlink:href="#home"></use>
                     </svg>
@@ -23,33 +20,33 @@
                 </router-link>
             </li>
             <li>
-                <router-link class="nav-link link-dark" to="/attendance">
+                <router-link class="nav-link text-dark" to="/attendance">
                     <svg class="bi me-2" width="16" height="16">
-                        <use xlink:href="#table"></use>
+                        <use xlink:href="#attendance"></use>
                     </svg>
                     Attendance
                 </router-link>
             </li>
             <li>
-                <router-link class="nav-link link-dark" to="/teachers">
+                <router-link class="nav-link text-dark" to="/teachers">
                     <svg class="bi me-2" width="16" height="16">
-                        <use xlink:href="#table"></use>
+                        <use xlink:href="#teachers"></use>
                     </svg>
                     Teachers
                 </router-link>
             </li>
             <li>
-                <router-link class="nav-link link-dark" to="/students">
+                <router-link class="nav-link text-dark" to="/students">
                     <svg class="bi me-2" width="16" height="16">
-                        <use xlink:href="#table"></use>
+                        <use xlink:href="#students"></use>
                     </svg>
                     Students
                 </router-link>
             </li>
             <li>
-                <router-link class="nav-link link-dark" to="/subjects">
+                <router-link class="nav-link text-dark" to="/subjects">
                     <svg class="bi me-2" width="16" height="16">
-                        <use xlink:href="#speedometer2"></use>
+                        <use xlink:href="#subjects"></use>
                     </svg>
                     Subjects
                 </router-link>
@@ -62,7 +59,7 @@ export default {};
 </script>
 <style scoped>
 .nav .active {
-    color: #fff;
+    color: #fff !important;
     background-color: #0d6efd;
 }
 </style>

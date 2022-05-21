@@ -2,20 +2,20 @@
 @section('content')
 @guest
 
-    <b-jumbotron class="p-5">
-        <template #header>Face Recognition Attendance Web</template>
+<b-jumbotron class="p-5">
+    <template #header>Face Recognition Attendance Web</template>
 
-        <template #lead>
-            Web app for Face Recognition Attendance
-        </template>
+    <template #lead>
+        Web app for Face Recognition Attendance
+    </template>
 
-        <hr class="my-4">
+    <hr class="my-4">
 
-        <p>A brief description of the Face Recognition Attendance App.</p>
+    <p>A brief description of the Face Recognition Attendance App.</p>
 
-        <b-button variant="primary" href="{{ route('login') }}">Login</b-button>
-        <b-button variant="success" href="{{ route('register') }}">Register</b-button>
-    </b-jumbotron>
+    <b-button variant="primary" href="{{ route('login') }}">Login</b-button>
+    <b-button variant="success" href="{{ route('register') }}">Register</b-button>
+</b-jumbotron>
 @endguest
 @auth
 <div class="container-fluid">
@@ -26,7 +26,7 @@
     @endif
     <div class="row justify-content-center">
         <sidebar></sidebar>
-        <div class="col-md-8">
+        <div class="col-md-9">
             <router-view></router-view>
         </div>
     </div>
