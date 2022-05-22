@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('subject_name');
             $table->integer('teacher_id');
             $table->string('status');
-            $table->datetime('time_in');
-            $table->datetime('time_out');
+            $table->string('time_in');
+            $table->string('time_out');
         });
     }
 
