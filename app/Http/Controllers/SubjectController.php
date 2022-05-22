@@ -16,10 +16,11 @@ class SubjectController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     public function index()
     {
-        //
+        $query = Subject::all();
+        return response()->json($query);
     }
 
     /**
@@ -40,7 +41,12 @@ class SubjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            Subject::create($request->all());
+            return $this->index();
+        } catch (\Exception $e) {
+            return response()->json(["error" => $e]);
+        }
     }
 
     /**
@@ -72,9 +78,14 @@ class SubjectController extends Controller
      * @param  \App\Models\Subject  $subject
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Subject $subject)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            Subject::find($id)->fill($request->all())->save();
+            return $this->index();
+        } catch (\Exception $e) {
+            return response()->json(["error" => $e]);
+        }
     }
 
     /**
@@ -83,8 +94,13 @@ class SubjectController extends Controller
      * @param  \App\Models\Subject  $subject
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Subject $subject)
+    public function destroy($id)
     {
-        //
+        try {
+            Subject::where("id", $id)->delete();
+            return $this->index();
+        } catch (\Exception $e) {
+            return response()->json(["error" => $e]);
+        }
     }
 }

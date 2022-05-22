@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -41,3 +43,18 @@ Route::get("getTeachers", [TeacherController::class, 'index']);
 Route::post("addTeacher", [TeacherController::class, 'store']);
 Route::put("editTeacher/{id}", [TeacherController::class, 'update']);
 Route::delete("deleteTeacher/{id}", [TeacherController::class, 'destroy']);
+
+Route::get("getStudents", [StudentController::class, 'index']);
+Route::post("addStudent", [StudentController::class, 'store']);
+Route::put("editStudent/{id}", [StudentController::class, 'update']);
+Route::delete("deleteStudent/{id}", [StudentController::class, 'destroy']);
+
+Route::get("getSubjects", [SubjectController::class, 'index']);
+Route::post("addSubject", [SubjectController::class, 'store']);
+Route::put("editSubject/{id}", [SubjectController::class, 'update']);
+Route::delete("deleteSubject/{id}", [SubjectController::class, 'destroy']);
+
+Route::get("getAttendance", [SubjectController::class, 'index']);
+Route::post("addAttendance", [SubjectController::class, 'store']);
+Route::put("editAttendance/{id}", [SubjectController::class, 'update']);
+Route::delete("deleteAttendance/{id}", [SubjectController::class, 'destroy']);

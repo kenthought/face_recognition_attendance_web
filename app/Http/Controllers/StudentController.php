@@ -16,10 +16,11 @@ class StudentController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     public function index()
     {
-        //
+        $query = Student::all();
+        return response()->json($query);
     }
 
     /**
@@ -40,7 +41,12 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            Student::create($request->all());
+            return $this->index();
+        } catch (\Exception $e) {
+            return response()->json(["error" => $e]);
+        }
     }
 
     /**
@@ -72,9 +78,14 @@ class StudentController extends Controller
      * @param  \App\Models\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Student $student)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            Student::find($id)->fill($request->all())->save();
+            return $this->index();
+        } catch (\Exception $e) {
+            return response()->json(["error" => $e]);
+        }
     }
 
     /**
@@ -83,8 +94,13 @@ class StudentController extends Controller
      * @param  \App\Models\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Student $student)
+    public function destroy($id)
     {
-        //
+        try {
+            Student::where("id", $id)->delete();
+            return $this->index();
+        } catch (\Exception $e) {
+            return response()->json(["error" => $e]);
+        }
     }
 }
