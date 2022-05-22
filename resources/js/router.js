@@ -15,6 +15,7 @@ Vue.use(VueRouter);
 // We'll talk about nested routes later.
 const routes = [
     { path: "/", component: Home },
+    { path: "/home", component: Home },
     { path: "/attendance", component: Attendance },
     { path: "/teachers", component: Teachers },
     { path: "/students", component: Students },
@@ -25,7 +26,7 @@ const routes = [
 // keep it simple for now.
 const router = new VueRouter({
     // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
-    mode: 'history',
+    mode: "history",
     routes, // short for `routes: routes`
     linkExactActiveClass: "active",
 });
