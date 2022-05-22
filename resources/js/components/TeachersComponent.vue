@@ -10,6 +10,7 @@
                 show-empty
                 striped
                 hover
+                responsive
                 :fields="fields"
                 :items="items"
                 label-sort-asc=""
@@ -206,13 +207,16 @@
                     size="sm"
                     variant="success"
                     @click="handleSubmit"
-                    >Edit</b-button
+                    >Update</b-button
                 >
                 <b-button
                     size="sm"
                     variant="danger"
                     @click="$bvModal.show('modal_confirm')"
                     >Delete</b-button
+                >
+                <b-button size="sm" @click="$bvModal.hide('modal_add')"
+                    >Close</b-button
                 >
             </div>
         </b-modal>
@@ -276,9 +280,6 @@ export default {
             items: [],
             view: false,
             editing: false,
-            dismissSecs: 5,
-            success: 0,
-            error: "",
         };
     },
     created() {},
@@ -316,9 +317,6 @@ export default {
             else this.address_state = false;
 
             return valid;
-        },
-        countDownChanged(dismissCountDown) {
-            this.success = dismissCountDown;
         },
         handleOk(bvModalEvent) {
             // Prevent modal from closing
@@ -412,7 +410,6 @@ export default {
                         "Error executing action."
                     );
                 });
-            this.load_item();
         },
         resetModal() {
             this.item = {
