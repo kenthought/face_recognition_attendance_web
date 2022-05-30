@@ -3,6 +3,7 @@
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\StudentPictureController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -58,3 +59,6 @@ Route::get("getAttendance", [SubjectController::class, 'index']);
 Route::post("addAttendance", [SubjectController::class, 'store']);
 Route::put("editAttendance/{id}", [SubjectController::class, 'update']);
 Route::delete("deleteAttendance/{id}", [SubjectController::class, 'destroy']);
+
+
+Route::post("addStudentPicture", [StudentPictureController::class, 'store']);
