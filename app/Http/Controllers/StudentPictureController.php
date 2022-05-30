@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\StudentPicture;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class StudentPictureController extends Controller
 {
@@ -12,14 +14,11 @@ class StudentPictureController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-    
+
     public function index()
     {
-        //
+        $query = StudentPicture::all();
+        return response()->json($query);
     }
 
     /**
@@ -40,7 +39,18 @@ class StudentPictureController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            StudentPicture::create($request->all());
+
+            //dili ga gana :(
+            $path = public_path() . "/attachments/" + $request->first_name + "_" + $request->last_name;
+            File::makeDirectory($path, 0777, true, true, true);
+            Storage::makeDirectory($path);
+
+            return $this->index();
+        } catch (\Exception $e) {
+            return response()->json(["error" => $e]);
+        }
     }
 
     /**
@@ -86,5 +96,9 @@ class StudentPictureController extends Controller
     public function destroy(StudentPicture $studentPicture)
     {
         //
+    }
+
+    public function getImage(Request $request)
+    {
     }
 }
