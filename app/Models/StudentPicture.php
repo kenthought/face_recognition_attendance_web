@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class StudentPicture extends Model
 {
     use HasFactory;
+    protected $fillable = ['student_id', 'file_name'];
 }
