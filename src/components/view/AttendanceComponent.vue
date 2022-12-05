@@ -1,6 +1,8 @@
 <template>
   <div class="p-5">
     <h2 class="text-normal mt-3 mb-3">Attendance</h2>
+    <hr />
+
     <div class="row justify-content-center mt-4 p-3">
       <b-table
         show-empty
@@ -19,20 +21,21 @@
 
 <script>
 import { getDatabase, ref, onValue } from "firebase/database";
+import { getAuth } from "firebase/auth";
 export default {
   data() {
     return {
       fields: [
+        {
+          key: "class_name",
+          sortable: false,
+        },
         {
           key: "student_name",
           sortable: true,
         },
         {
           key: "subject",
-          sortable: false,
-        },
-        {
-          key: "timeType",
           sortable: false,
         },
         {
@@ -50,8 +53,9 @@ export default {
   methods: {
     load_item() {
       const db = getDatabase();
+      const auth = getAuth();
 
-      const attendance = ref(db, "attendance");
+      const attendance = ref(db, "attendance/" + auth.currentUser.uid);
       onValue(attendance, (snapshot) => {
         this.items = [];
         const data = snapshot.val();

@@ -30,14 +30,14 @@ const router = new VueRouter({
         requiresAuth: true,
       },
     },
-    {
-      path: "/students",
-      name: "students",
-      component: Students,
-      meta: {
-        requiresAuth: true,
-      },
-    },
+    // {
+    //   path: "/students",
+    //   name: "students",
+    //   component: Students,
+    //   meta: {
+    //     requiresAuth: true,
+    //   },
+    // },
     {
       path: "/subjects",
       name: "subjects",

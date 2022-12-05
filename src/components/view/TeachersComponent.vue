@@ -2,9 +2,9 @@
   <div class="p-5">
     <h2 class="text-normal mt-3 mb-3">Teachers</h2>
     <hr />
-    <b-button class="mt-3" variant="outline-primary" v-b-modal.modal_add
+    <!-- <b-button class="mt-3" variant="outline-primary" v-b-modal.modal_add
       ><b-icon icon="plus-circle-fill"></b-icon> Add Teacher</b-button
-    >
+    > -->
     <div class="row justify-content-center mt-4 p-3">
       <b-table
         show-empty
@@ -16,8 +16,8 @@
         label-sort-asc=""
         label-sort-desc=""
         label-sort-clear=""
-        @row-clicked="onRowClicked"
       ></b-table>
+      <!-- @row-clicked="onRowClicked" -->
     </div>
 
     <!-- Add Modal -->
@@ -212,6 +212,10 @@ export default {
       address_state: null,
       fields: [
         {
+          key: "id_number",
+          sortable: false,
+        },
+        {
           key: "last_name",
           sortable: true,
         },
@@ -225,10 +229,6 @@ export default {
         },
         {
           key: "birthday",
-          sortable: false,
-        },
-        {
-          key: "course",
           sortable: false,
         },
         {

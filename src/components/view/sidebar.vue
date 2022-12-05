@@ -5,7 +5,7 @@
     v-if="isLoggedIn"
   >
     <router-link to="/" class="text-center text-dark pt-1 text-decoration-none">
-      <h4 class="mt-3">Face Recognition Attendance Web</h4>
+      <h4 class="mt-3">SPCT ATTENDANCE</h4>
     </router-link>
     <hr />
     <ul class="nav nav-pills flex-column mb-auto">
@@ -33,14 +33,14 @@
           Teachers
         </router-link>
       </li>
-      <li>
+      <!-- <li>
         <router-link class="nav-link text-dark" to="/students">
           <svg class="bi me-2" width="16" height="16">
             <use xlink:href="#students"></use>
           </svg>
           Students
         </router-link>
-      </li>
+      </li> -->
       <li>
         <router-link class="nav-link text-dark" to="/subjects">
           <svg class="bi me-2" width="16" height="16">

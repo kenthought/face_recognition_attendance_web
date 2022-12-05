@@ -2,7 +2,7 @@
   <div class="p-5">
     <h2 class="text-normal mt-3 mb-3">Subjects</h2>
     <hr />
-    <b-button class="mt-3" variant="outline-primary" v-b-modal.modal_add
+    <b-button class="mt-3" variant="outline-info" v-b-modal.modal_add
       ><b-icon icon="plus-circle-fill"></b-icon> Add Subject</b-button
     >
     <div class="row justify-content-center mt-4 p-3">
@@ -61,7 +61,7 @@
             :disabled="editing != true ? (view == true ? true : false) : false"
           ></b-form-input>
         </b-form-group>
-        <b-form-group
+        <!-- <b-form-group
           class="mb-2"
           label="Subject Teacher"
           label-for="teacher_id"
@@ -76,7 +76,7 @@
             required
             :disabled="editing != true ? (view == true ? true : false) : false"
           ></b-form-select>
-        </b-form-group>
+        </b-form-group> -->
         <b-form-group
           class="mb-2"
           label="Status"
@@ -140,6 +140,7 @@ import {
   onValue,
   remove,
 } from "firebase/database";
+import { getAuth } from "firebase/auth";
 export default {
   data() {
     return {
@@ -187,8 +188,9 @@ export default {
   methods: {
     load_item() {
       const db = getDatabase();
+      const auth = getAuth();
 
-      const subjects = ref(db, "subjects");
+      const subjects = ref(db, "subjects/" + auth.currentUser.uid);
       onValue(subjects, (snapshot) => {
         this.items = [];
         const data = snapshot.val();
@@ -231,8 +233,8 @@ export default {
       const valid = this.$refs.form.checkValidity();
       if (this.item.subject_name != "") this.subject_name_state = true;
       else this.subject_name_state = false;
-      if (this.item.teacher_id != null) this.teacher_id_state = true;
-      else this.teacher_id_state = false;
+      // if (this.item.teacher_id != null) this.teacher_id_state = true;
+      // else this.teacher_id_state = false;
       if (this.item.status != "") this.status_state = true;
       else this.status_state = false;
       if (this.item.time_in != "") this.time_in_state = true;
@@ -256,11 +258,14 @@ export default {
 
       if (this.editing != true) {
         const db = getDatabase();
-        const subjectKey = push(child(ref(db), "subjects")).key;
-        set(ref(db, "subjects/" + subjectKey), {
+        const auth = getAuth();
+        const subjectKey = push(
+          child(ref(db), "subjects/" + auth.currentUser.uid)
+        ).key;
+        set(ref(db, "subjects/" + auth.currentUser.uid + "/" + subjectKey), {
           id: subjectKey,
           subject_name: this.item.subject_name,
-          teacher_id: this.item.teacher_id,
+          // teacher_id: this.item.teacher_id,
           status: this.item.status,
           time_in: this.item.time_in,
           time_out: this.item.time_out,
@@ -316,13 +321,13 @@ export default {
     resetModal() {
       this.item = {
         subject_name: "",
-        teacher_id: null,
+        // teacher_id: null,
         status: "",
         time_in: "",
         time_out: "",
       };
       this.subject_name_state = null;
-      this.teacher_id_state = null;
+      // this.teacher_id_state = null;
       this.status_state = null;
       this.time_in_state = null;
       this.time_out_state = null;
