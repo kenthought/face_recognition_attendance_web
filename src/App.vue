@@ -6,7 +6,7 @@ export default {
   components: { sidebar, Landing },
   data() {
     return {
-      isLoggedIn: false,
+      isLoggedIn: null,
     };
   },
   mounted() {
@@ -38,7 +38,14 @@ export default {
 <template>
   <div id="app">
     <div class="container-fluid">
-      <div class="row content-size">
+      <div
+        class="text-center"
+        style="height: 100vh; line-height: 100vh"
+        v-if="isLoggedIn == null"
+      >
+        <b-spinner variant="info" type="grow"></b-spinner>
+      </div>
+      <div class="row content-size" v-else>
         <sidebar :isLoggedIn="isLoggedIn" :signOut="signOut" />
         <div class="col-md-10 pt-5">
           <router-view />

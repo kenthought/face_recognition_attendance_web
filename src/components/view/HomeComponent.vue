@@ -21,7 +21,12 @@
       <div class="card-body">
         <div class="row">
           <div class="col-4 p-2" v-for="item in classes_items" :key="item.id">
-            <b-card :title="item.class_name" :sub-title="item.subject">
+            <b-card
+              class="pointer"
+              :title="item.class_name"
+              :sub-title="item.subject"
+              @click="showStudents(item)"
+            >
               <b-card-text>
                 {{ "Students : " + item.students }}
                 <br />
@@ -33,7 +38,7 @@
       </div>
     </div>
 
-    <b-overlay :show="isLoading" rounded="sm">
+    <b-overlay :show="isLoading" rounded="sm" spinner-variant="info">
       <div class="card mt-3" v-show="action == 'generate report'">
         <div class="card-header">Generate Report</div>
         <div class="card-body">
@@ -165,6 +170,26 @@
         >
       </div>
     </b-modal>
+    <b-modal id="modal_student" ref="modal_student" size="lg">
+      <div slot="modal-header">
+        <h5 class="modal-title">Students</h5>
+      </div>
+      <b-table
+        id="students_table"
+        class="mt-2"
+        show-empty
+        striped
+        bordered
+        hover
+        sticky-header
+        responsive
+        :fields="student_fields"
+        :items="student_items"
+        label-sort-asc=""
+        label-sort-desc=""
+        label-sort-clear=""
+      ></b-table>
+    </b-modal>
   </div>
 </template>
 <script>
@@ -209,6 +234,11 @@ export default {
       month_options: [{ value: null, text: "Please select a month..." }],
       report: [],
       reports: [],
+      student_fields: [
+        { key: "id_number", sortable: true },
+        { key: "student_name", sortable: true },
+      ],
+      student_items: [],
       timeout: null,
       isLoading: false,
     };
@@ -401,6 +431,30 @@ export default {
 
       return sa;
     },
+    showStudents(item) {
+      const db = getDatabase();
+      const students = ref(db, "students/" + item.id);
+      onValue(students, (snapshot) => {
+        this.student_items = [];
+        const data = snapshot.val();
+        var result = Object.keys(data).map((key) => {
+          this.student_items.push({
+            id_number: data[key].id_number,
+            student_name: data[key].student_name,
+          });
+        });
+      });
+
+      this.$bvModal.show("modal_student");
+    },
   },
 };
 </script>
+<style scoped>
+.pointer {
+  cursor: pointer;
+}
+/* .pointer:hover {
+
+} */
+</style>
