@@ -47,8 +47,8 @@ const router = new VueRouter({
       },
     },
     {
-      path: "/teachers",
-      name: "teachers",
+      path: "/profile",
+      name: "profile",
       component: Teachers,
       meta: {
         requiresAuth: true,

@@ -18,19 +18,19 @@
         </router-link>
       </li>
       <li>
+        <router-link class="nav-link text-dark" to="/profile">
+          <svg class="bi me-2" width="16" height="16">
+            <use xlink:href="#profile"></use>
+          </svg>
+          Profile
+        </router-link>
+      </li>
+      <li>
         <router-link class="nav-link text-dark" to="/attendance">
           <svg class="bi me-2" width="16" height="16">
             <use xlink:href="#attendance"></use>
           </svg>
           Attendance
-        </router-link>
-      </li>
-      <li>
-        <router-link class="nav-link text-dark" to="/teachers">
-          <svg class="bi me-2" width="16" height="16">
-            <use xlink:href="#teachers"></use>
-          </svg>
-          Teachers
         </router-link>
       </li>
       <!-- <li>
@@ -69,6 +69,6 @@ export default {
 <style scoped>
 .nav .active {
   color: #fff !important;
-  background-color: #0d6efd;
+  background-color: #17a2b8 !important;
 }
 </style>

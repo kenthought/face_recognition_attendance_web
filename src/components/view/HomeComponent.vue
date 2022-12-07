@@ -20,8 +20,9 @@
       <div class="card-header">Classes</div>
       <div class="card-body">
         <div class="row">
-          <div class="col-4 p-2" v-for="item in classes_items" :key="item.id">
+          <div class="col-4 p-2" v-for="item in classList" :key="item.id">
             <b-card
+              id="class-list"
               class="pointer"
               :title="item.class_name"
               :sub-title="item.subject"
@@ -35,6 +36,12 @@
             </b-card>
           </div>
         </div>
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="rows"
+          :per-page="perPage"
+          aria-controls="class-list"
+        ></b-pagination>
       </div>
     </div>
 
@@ -213,6 +220,8 @@ export default {
       // date_state_text: "",
       action: "classes",
       class_name: "",
+      currentPage: 1,
+      perPage: 6,
       fields: [],
       months: [
         "January",
@@ -243,6 +252,17 @@ export default {
       isLoading: false,
     };
   },
+  computed: {
+    rows() {
+      return this.classes_items.length;
+    },
+    classList() {
+      return this.classes_items.slice(
+        (this.currentPage - 1) * this.perPage,
+        this.currentPage * this.perPage
+      );
+    },
+  },
   mounted() {
     this.load_item();
   },
@@ -264,6 +284,7 @@ export default {
             this.classes_items.push(data[key]);
           });
         });
+        this.classes_items.reverse();
       }
     },
     fetchReport(classID) {

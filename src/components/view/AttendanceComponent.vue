@@ -5,17 +5,28 @@
 
     <div class="row justify-content-center mt-4 p-3">
       <b-table
+        id="attendance-table"
         show-empty
         striped
         hover
         responsive
+        :sort-by.sync="sortBy"
+        :sort-desc="true"
         :fields="fields"
         :items="items"
         label-sort-asc=""
         label-sort-desc=""
         label-sort-clear=""
+        :per-page="7"
+        :current-page="currentPage"
       ></b-table>
     </div>
+    <b-pagination
+      v-model="currentPage"
+      :total-rows="rows"
+      :per-page="7"
+      aria-controls="attendance-table"
+    ></b-pagination>
   </div>
 </template>
 
@@ -25,6 +36,8 @@ import { getAuth } from "firebase/auth";
 export default {
   data() {
     return {
+      sortBy: "time",
+      currentPage: 1,
       fields: [
         {
           key: "class_name",
@@ -40,11 +53,16 @@ export default {
         },
         {
           key: "time",
-          sortable: false,
+          sortable: true,
         },
       ],
       items: [],
     };
+  },
+  computed: {
+    rows() {
+      return this.items.length;
+    },
   },
   mounted() {
     console.log("Component mounted.");

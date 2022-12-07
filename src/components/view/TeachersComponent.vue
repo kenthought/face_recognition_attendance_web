@@ -1,11 +1,11 @@
 <template>
   <div class="p-5">
-    <h2 class="text-normal mt-3 mb-3">Teachers</h2>
+    <h2 class="text-normal mt-3 mb-3">Profile</h2>
     <hr />
     <!-- <b-button class="mt-3" variant="outline-primary" v-b-modal.modal_add
       ><b-icon icon="plus-circle-fill"></b-icon> Add Teacher</b-button
     > -->
-    <div class="row justify-content-center mt-4 p-3">
+    <!-- <div class="row justify-content-center mt-4 p-3">
       <b-table
         show-empty
         striped
@@ -16,10 +16,59 @@
         label-sort-asc=""
         label-sort-desc=""
         label-sort-clear=""
+        @row-clicked="onRowClicked"
       ></b-table>
-      <!-- @row-clicked="onRowClicked" -->
-    </div>
-
+    </div> -->
+    <b-list-group>
+      <div v-if="items.length != 0">
+        <b-list-group-item>
+          <div class="row mr-4 p-3">
+            <b-avatar class="mr-3" size="4rem" variant="info"></b-avatar>
+            <div class="col p-1">
+              <h5>
+                {{
+                  items.first_name +
+                  " " +
+                  items.middle_name +
+                  " " +
+                  items.last_name
+                }}
+              </h5>
+              <p>{{ items.id_number }}</p>
+            </div>
+          </div>
+        </b-list-group-item>
+        <b-list-group-item>
+          <div class="row mr-4 p-3">
+            <div class="col-5">
+              <b-icon icon="phone" class="mr-3" variant="info"></b-icon>
+              <span>{{ items.contact_no }}</span>
+            </div>
+          </div>
+        </b-list-group-item>
+        <b-list-group-item>
+          <div class="row mr-4 p-3">
+            <div class="col-5">
+              <b-icon icon="envelope" class="mr-3" variant="info"></b-icon>
+              <span>{{ items.email }}</span>
+            </div>
+          </div>
+        </b-list-group-item>
+        <b-list-group-item>
+          <div class="row mr-4 p-3">
+            <div class="col-5">
+              <b-icon
+                icon="calendar-event"
+                class="mr-3"
+                variant="info"
+              ></b-icon>
+              <span>{{ items.birthday }}</span>
+            </div>
+          </div>
+        </b-list-group-item>
+      </div>
+      <b-spinner class="m-5 text-center" variant="info" v-else></b-spinner>
+    </b-list-group>
     <!-- Add Modal -->
     <b-modal
       id="modal_add"
@@ -190,6 +239,7 @@ import {
   onValue,
   remove,
 } from "firebase/database";
+import { getAuth } from "firebase/auth";
 
 export default {
   data() {
@@ -254,13 +304,21 @@ export default {
   methods: {
     load_item() {
       const db = getDatabase();
-      const teachers = ref(db, "teachers");
+      const auth = getAuth();
+      //changed to get teacher profile
+      // const teachers = ref(db, "teachers");
+      // onValue(teachers, (snapshot) => {
+      //   this.items = [];
+      //   const data = snapshot.val();
+      //   console.log(data);
+      //   var result = Object.keys(data).map((key) => {
+      //     this.items.push(data[key]);
+      //   });
+      // });
+      const teachers = ref(db, "teachers/" + auth.currentUser.uid);
+
       onValue(teachers, (snapshot) => {
-        this.items = [];
-        const data = snapshot.val();
-        var result = Object.keys(data).map((key) => {
-          this.items.push(data[key]);
-        });
+        this.items = snapshot.val();
       });
     },
     onRowClicked(items) {

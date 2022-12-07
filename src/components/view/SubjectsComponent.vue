@@ -7,6 +7,7 @@
     >
     <div class="row justify-content-center mt-4 p-3">
       <b-table
+        id="subjects-table"
         show-empty
         striped
         hover
@@ -16,9 +17,17 @@
         label-sort-asc=""
         label-sort-desc=""
         label-sort-clear=""
+        :per-page="7"
+        :current-page="currentPage"
         @row-clicked="onRowClicked"
       ></b-table>
     </div>
+    <b-pagination
+      v-model="currentPage"
+      :total-rows="rows"
+      :per-page="7"
+      aria-controls="subjects-table"
+    ></b-pagination>
 
     <!-- Add Modal -->
     <b-modal
@@ -151,6 +160,7 @@ export default {
         time_in: "",
         time_out: "",
       },
+      currentPage: 1,
       fields: [
         {
           key: "subject_name",
@@ -179,6 +189,11 @@ export default {
       view: false,
       editing: false,
     };
+  },
+  computed: {
+    rows() {
+      return this.items.length;
+    },
   },
   mounted() {
     console.log("Component mounted.");
